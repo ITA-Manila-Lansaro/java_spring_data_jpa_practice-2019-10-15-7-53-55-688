@@ -1,4 +1,4 @@
-package com.tw.apistackbase.core;
+package com.tw.apistackbase.Entity;
 
 import javax.persistence.*;
 import java.util.List;
