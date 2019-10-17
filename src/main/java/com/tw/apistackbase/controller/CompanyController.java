@@ -37,27 +37,22 @@ public class CompanyController {
 
     @PatchMapping(produces = {"application/json"})
     public HttpEntity updateCompany (@RequestBody Company company){
-        companyRepository.findById(company.getId()).ifPresent(a -> {
-            a.setName(company.getName());
-            companyRepository.save(a);
-        });
-        return new ResponseEntity(HttpStatus.OK);
+        return companyService.updateCompany(company);
     }
 
     @DeleteMapping(value = "/{id}" , produces = {"application/json"})
     public HttpEntity deleteCompany (@PathVariable Long id){
-        companyRepository.deleteById(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return companyService.deleteCompany(id);
     }
 
     @GetMapping(value = "/byQuery/{id}")
     public Company getCompanyUsingQuery (@PathVariable Long id){
-        return companyRepository.findCompanyUsingQuery(id);
+        return companyService.getCompanyUsingQuery(id);
     }
 
     @GetMapping(produces = {"application/json"})
     public Iterable<Company> getCompanyById (@RequestParam String name){
-        return companyRepository.findCompanyByNameContaining   (name);
+        return companyService.findCompanyByNameContaining(name);
     }
 
 }

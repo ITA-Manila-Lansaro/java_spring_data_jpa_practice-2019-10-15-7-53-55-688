@@ -8,9 +8,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CompanyService {
 
     @Autowired
@@ -28,6 +30,27 @@ public class CompanyService {
     public Company findCompanyById (Long id){
         return companyRepository.findCompanyById(id);
     }
+
+    public HttpEntity updateCompany (Company company){
+        companyRepository.findById(company.getId()).ifPresent(a -> {
+            a.setName(company.getName());
+            companyRepository.save(a);
+        });
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    public HttpEntity deleteCompany (Long id){
+        companyRepository.deleteById(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    public Company getCompanyUsingQuery (Long id){
+        return companyRepository.findCompanyUsingQuery(id);
+    }
+
+    public Iterable<Company> findCompanyByNameContaining(String name){
+        return companyRepository.findCompanyByNameContaining(name);
+    };
 
 
 }
