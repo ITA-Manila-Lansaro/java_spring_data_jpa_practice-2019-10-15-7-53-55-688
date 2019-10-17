@@ -3,7 +3,9 @@ package com.tw.apistackbase.controller;
 import com.tw.apistackbase.core.Company;
 import com.tw.apistackbase.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.CompositeName;
@@ -15,14 +17,15 @@ public class CompanyController {
     @Autowired
     private CompanyRepository companyRepository;
 
-    @GetMapping(produces = {"application/json"})
+    @GetMapping(value = "/all" , produces = {"application/json"})
     public Iterable<Company> list() {
         return companyRepository.findAll();
     }
 
     @PostMapping(produces = {"application/json"})
-    public Company add(@RequestBody Company company) {
-        return companyRepository.save(company);
+    public HttpEntity add(@RequestBody Company company) {
+        companyRepository.save(company);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping(value= "/{id}", produces = {"application/json"})
@@ -30,17 +33,29 @@ public class CompanyController {
         return companyRepository.findCompanyById(id);
     }
 
-    @PutMapping(produces = {"application/json"})
-    public Company updateCompany (@RequestBody Company company){
-        return companyRepository.save(company);
+    @PatchMapping(produces = {"application/json"})
+    public HttpEntity updateCompany (@RequestBody Company company){
+        companyRepository.findById(company.getId()).ifPresent(a -> {
+            a.setName(company.getName());
+            companyRepository.save(a);
+        });
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @ResponseStatus(HttpStatus.GONE)
     @DeleteMapping(value = "/{id}" , produces = {"application/json"})
-    public void deleteCompany (@PathVariable Long id){
+    public HttpEntity deleteCompany (@PathVariable Long id){
         companyRepository.deleteById(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
+    @GetMapping(value = "/byQuery/{id}")
+    public Company getCompanyUsingQuery (@PathVariable Long id){
+        return companyRepository.findCompanyUsingQuery(id);
+    }
 
+    @GetMapping(produces = {"application/json"})
+    public Iterable<Company> getCompanyById (@RequestParam String name){
+        return companyRepository.findCompanyByNameContaining   (name);
+    }
 
 }

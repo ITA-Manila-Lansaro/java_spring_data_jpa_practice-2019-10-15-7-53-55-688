@@ -4,12 +4,14 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name ="tb_company")
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO  ,generator = "seq")
 
     private Long id;
 
+    @Column(name ="tb_name")
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL)
