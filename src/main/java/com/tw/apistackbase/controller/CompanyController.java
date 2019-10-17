@@ -3,12 +3,15 @@ package com.tw.apistackbase.controller;
 import com.tw.apistackbase.core.Company;
 import com.tw.apistackbase.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Sort;
 
 import javax.naming.CompositeName;
+import java.util.List;
 
 @RestController
 @RequestMapping("/companies")
@@ -18,13 +21,15 @@ public class CompanyController {
     private CompanyRepository companyRepository;
 
     @GetMapping(value = "/all" , produces = {"application/json"})
-    public Iterable<Company> list() {
-        return companyRepository.findAll();
+    public Iterable<Company> list(@RequestParam (required = false, defaultValue = "0") Integer page,
+                                    @RequestParam (required = false, defaultValue = "5") Integer pageSize) {
+        companyRepository.findAll();
+        return companyRepository.findAll(PageRequest.of(page,pageSize));
     }
 
     @PostMapping(produces = {"application/json"})
-    public HttpEntity add(@RequestBody Company company) {
-        companyRepository.save(company);
+    public HttpEntity add(@RequestBody List<Company> companyList) {
+        companyList.forEach(a -> companyRepository.save(a));
         return new ResponseEntity(HttpStatus.OK);
     }
 
