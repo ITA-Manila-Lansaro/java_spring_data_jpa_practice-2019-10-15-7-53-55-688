@@ -5,6 +5,7 @@ import com.tw.apistackbase.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,9 @@ public class CompanyController {
     }
 
     @PostMapping(produces = {"application/json"})
-    public void add(@RequestBody List<Company> companyList) {
+    public HttpEntity add(@RequestBody List<Company> companyList) {
          companyService.addAll(companyList);
+         return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @GetMapping(value= "/{id}", produces = {"application/json"})
@@ -51,7 +53,7 @@ public class CompanyController {
     }
 
     @GetMapping(produces = {"application/json"})
-    public Iterable<Company> getCompanyById (@RequestParam String name){
+    public Iterable<Company> getCompanyByContaining (@RequestParam String name){
         return companyService.findCompanyByNameContaining(name);
     }
 
