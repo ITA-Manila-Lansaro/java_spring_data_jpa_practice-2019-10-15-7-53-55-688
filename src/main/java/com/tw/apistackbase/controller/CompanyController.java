@@ -1,10 +1,8 @@
 package com.tw.apistackbase.controller;
 
 import com.tw.apistackbase.Entity.Company;
-import com.tw.apistackbase.repository.CompanyRepository;
 import com.tw.apistackbase.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +24,8 @@ public class CompanyController {
     }
 
     @PostMapping(produces = {"application/json"})
-    public HttpEntity add(@RequestBody List<Company> companyList) {
-        return companyService.addAll(companyList);
+    public void add(@RequestBody List<Company> companyList) {
+         companyService.addAll(companyList);
     }
 
     @GetMapping(value= "/{id}", produces = {"application/json"})
@@ -37,12 +35,14 @@ public class CompanyController {
 
     @PatchMapping(produces = {"application/json"})
     public HttpEntity updateCompany (@RequestBody Company company){
-        return companyService.updateCompany(company);
+        companyService.updateCompany(company);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}" , produces = {"application/json"})
     public HttpEntity deleteCompany (@PathVariable Long id){
-        return companyService.deleteCompany(id);
+        companyService.deleteCompany(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping(value = "/byQuery/{id}")

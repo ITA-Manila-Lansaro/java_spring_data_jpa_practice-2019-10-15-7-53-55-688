@@ -31,17 +31,16 @@ public class CompanyService {
         return companyRepository.findCompanyById(id);
     }
 
-    public HttpEntity updateCompany (Company company){
+    public void  updateCompany (Company company){
         companyRepository.findById(company.getId()).ifPresent(a -> {
             a.setName(company.getName());
             companyRepository.save(a);
         });
-        return new ResponseEntity(HttpStatus.OK);
+
     }
 
-    public HttpEntity deleteCompany (Long id){
+    public void deleteCompany (Long id){
         companyRepository.deleteById(id);
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     public Company getCompanyUsingQuery (Long id){
