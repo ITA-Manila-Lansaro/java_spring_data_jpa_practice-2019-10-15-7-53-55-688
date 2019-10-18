@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -49,7 +50,7 @@ class CompanyControllerTest {
         companyList.add(new Company());
         companyList.add(new Company());
 
-        when(companyController.list(0, 5)).thenReturn(companyList);
+            when(companyService.findAllWithPagination( 0, 5)).thenReturn(companyList);
 
         ResultActions result = mvc.perform(get("/companies/all"));
         //then
@@ -78,7 +79,7 @@ class CompanyControllerTest {
         companyList.add(company);
         companyList.add(new Company());
 
-        when(companyController.getCompanyById(1L)).thenReturn(companyList.get(0));
+        when(companyService.findCompanyById(1L)).thenReturn(companyList.get(0));
 
         ResultActions result = mvc.perform(get("/companies/1"));
         //then
@@ -117,7 +118,7 @@ class CompanyControllerTest {
         companyList.add(company);
         companyList.add(new Company());
 
-        when(companyController.getCompanyUsingQuery(1L)).thenReturn(companyList.get(0));
+        when(companyService.getCompanyUsingQuery(1L)).thenReturn(companyList.get(0));
 
         ResultActions result = mvc.perform(get("/companies/byQuery/1"));
         //then
@@ -133,7 +134,7 @@ class CompanyControllerTest {
         companyList.add(company);
         companyList.add(new Company());
 
-        when(companyController.getCompanyByContaining("naj")).thenReturn(companyList);
+        when(companyService.findCompanyByNameContaining("naj")).thenReturn(companyList);
 
         ResultActions result = mvc.perform(get("/companies?name=naj"));
         //then
