@@ -39,8 +39,12 @@ public class CompanyService {
 
     }
 
-    public void deleteCompany (Long id){
+    public boolean deleteCompany (Long id){
+        if(companyRepository.findCompanyById(id) != null){
         companyRepository.deleteById(id);
+        return true;
+        }
+        return false;
     }
 
     public Company getCompanyUsingQuery (Long id){
@@ -50,6 +54,10 @@ public class CompanyService {
     public Iterable<Company> findCompanyByNameContaining(String name){
         return companyRepository.findCompanyByNameContaining(name);
     };
+
+    public boolean checkIfExisting(Long id) {
+        return companyRepository.findCompanyById(id) != null;
+    }
 
 
 }
